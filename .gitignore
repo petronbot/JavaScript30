@@ -2,3 +2,6 @@
 node_modules/
 *.log
 haters/
+
+*-FINISHED.html
+*-START.html
