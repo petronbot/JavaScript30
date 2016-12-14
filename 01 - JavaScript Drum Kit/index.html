@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="keys">
+  </div>
+
+<script>
+
+  // Data
+  const AUDIO_DIR = 'sounds/';
+  const KEYS = [
+    {
+      code: 65,
+      label: 'A',
+      name: 'clap',
+      audioSrc: 'clap.wav'
+    },
+    {
+      code: 83,
+      label: 'S',
+      name: 'hihat',
+      audioSrc: 'hihat.wav'
+    },
+    {
+      code: 68,
+      label: 'D',
+      name: 'kick',
+      audioSrc: 'kick.wav'
+    },
+    {
+      code: 70,
+      label: 'F',
+      name: 'openhat',
+      audioSrc: 'openhat.wav'
+    },
+    {
+      code: 71,
+      label: 'G',
+      name: 'boom',
+      audioSrc: 'boom.wav'
+    },
+    {
+      code: 72,
+      label: 'H',
+      name: 'ride',
+      audioSrc: 'ride.wav'
+    },
+    {
+      code: 74,
+      label: 'J',
+      name: 'snare',
+      audioSrc: 'snare.wav'
+    },
+    {
+      code: 75,
+      label: 'K',
+      name: 'tom',
+      audioSrc: 'tom.wav'
+    },
+    {
+      code: 76,
+      label: 'L',
+      name: 'tink',
+      audioSrc: 'tink.wav'
+    }
+  ];
+
+  // Add keys to DOM
+  let keyboard = document.querySelector('.keys');
+  let htmlString = '';
+
+  for (let key of KEYS) {
+    htmlString += `<div data-key="${key.code}" class="key">
+      <kbd>${key.label}</kbd>
+      <span class="sound">${key.name}</span>
+      <audio data-key="${key.code}" preload="auto" src="${AUDIO_DIR}${key.audioSrc}"></audio>
+    </div>`;
+  }
+  keyboard.innerHTML = htmlString;
+
+  function triggerDrumByKeyCode(keyCode) {
+    let key = document.querySelector(`.key[data-key="${keyCode}"]`);
+    let audio = document.querySelector(`audio[data-key="${keyCode}"]`);
+
+    if (!key || !audio) {
+      return;
+    }
+
+    playAudio(audio);
+    activateKey(key);
+  }
+
+  function playAudio(audio) {
+    if (audio.played.length > 0) {
+      audio.currentTime = 0;
+    }
+    audio.play();
+  }
+
+  function activateKey(key) {
+    key.classList.add('playing');
+    key.addEventListener('transitionend', toggleKeyClass, { once: true });
+  }
+
+  function toggleKeyClass() {
+    this.classList.toggle('playing')
+  }
+
+  function onKeyClick() {
+    triggerDrumByKeyCode(this.dataset.key);
+  }
+
+  function onKeyDown(event) {
+    triggerDrumByKeyCode(event.keyCode);
+  }
+
+  let keys = document.querySelectorAll('.key');
+  Array.from(keys).forEach(key => {
+      key.addEventListener('click', onKeyClick, true)
+  });
+
+  window.addEventListener('keydown', onKeyDown);
+
+</script>
+
+
+</body>
+</html>
