@@ -18,7 +18,7 @@ While I've aimed to keep my code tidy and readable, I'm not spending a lot of ti
 ## Exercises
 
 * [x] 01 - JavaScript Drum Kit
-* [ ] 02 - JS + CSS Clock
+* [x] 02 - JS + CSS Clock
 * [ ] 03 - CSS Variables
 * [ ] 04 - Array Cardio Day 1
 * [ ] 05 - Flex Panel Gallery

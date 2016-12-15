@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand hour-hand"></div>
+        <div class="hand min-hand"></div>
+        <div class="hand second-hand"></div>
+      </div>
+    </div>
+
+  <style>
+    html {
+      background:#018DED url(http://unsplash.it/1500/1000?image=881&blur=50);
+      background-size:cover;
+      font-family:'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      font-size: 2rem;
+      display:flex;
+      flex:1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border:20px solid white;
+      border-radius:50%;
+      margin:50px auto;
+      position: relative;
+      padding:2rem;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px black,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .clock-face:before {
+      content: "";
+      display: block;
+      width: 3px;
+      height: 3px;
+      background: teal;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      border-radius: 50%;
+    }
+
+    .interval-marker {
+      width: 0;
+      height: 50%;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      transform-origin: center bottom;
+    }
+
+    .interval-marker:before {
+      content: "";
+      display: block;
+      width: 0;
+      height: 0;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      border: 6px solid transparent;
+      border-top-color: black;
+    }
+
+    .hand {
+      width:6px;
+      height: 50%;
+      background:black;
+      position: absolute;
+      top: 5%;
+      left: calc(50% - 3px);
+      transform-origin: center 90%;
+      opacity: 1;
+      box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
+    }
+
+    .second-hand {
+      opacity: .3;
+    }
+
+    .hour-hand {
+      height: 25%;
+      top: 27.75%;
+    }
+
+  </style>
+
+  <script>
+
+  const HANDS = [
+    {
+      name: 'hours',
+      elem: document.querySelector('.hour-hand'),
+      intervals: 12
+    },
+    {
+      name: 'minutes',
+      elem: document.querySelector('.min-hand'),
+      intervals: 60
+    },
+    {
+      name: 'seconds',
+      elem: document.querySelector('.second-hand'),
+      intervals: 60
+    }
+  ];
+
+  function placeMarkers() {
+    let clock = document.querySelector('.clock-face');
+    let intervals = 12;
+    for (let step = 0; step < intervals; step++) {
+      let marker = document.createElement('i');
+      marker.classList.add('interval-marker');
+      marker.setAttribute('style', `transform: rotate(${step * 360 / intervals}deg);`)
+      clock.appendChild(marker);
+    }
+  }
+
+  function getCurrentTime() {
+    let now = new Date;
+    return {
+      seconds: now.getSeconds(),
+      minutes: now.getMinutes(),
+      hours: now.getHours()
+    }
+  }
+
+  function updateHands() {
+    let time = getCurrentTime();
+    HANDS.forEach(function(hand) {
+      let rotation = (time[hand.name] % hand.intervals) * (360/hand.intervals);
+      hand.elem.setAttribute('style', `transform: rotate(${rotation}deg)`);
+    });
+  }
+
+  function updateClock() {
+    updateHands();
+    requestAnimationFrame(updateClock);
+  }
+
+  placeMarkers();
+  requestAnimationFrame(updateClock);
+
+  </script>
+</body>
+</html>
