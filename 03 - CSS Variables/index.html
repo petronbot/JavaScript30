@@ -22,6 +22,22 @@
 
   <style>
 
+    :root {
+      --spacing: 10px;
+      --blur: 10px;
+      --base: #ffc600;
+    }
+
+    .hl {
+      color: var(--base);
+    }
+
+    img {
+      padding: var(--spacing);
+      background-color: var(--base);
+      filter: blur(var(--blur));
+    }
+
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -45,43 +61,20 @@
     input {
       width:100px;
     }
-
-    img {
-      border: 0 solid #ffc600;
-    }
   </style>
 
   <script>
 
-  const IMG = document.querySelector('img');
-  const STYLES = [
-    {
-      property: 'borderWidth',
-      value: (val, unit) => `${val}${unit}`,
-      name: 'spacing'
-    },
-    {
-      property: 'filter',
-      value: (val, unit) => `blur(${val}${unit})`,
-      name: 'blur'
-    },
-    {
-      property: 'borderColor',
-      value: (val) => val,
-      name: 'base'
-    }
-  ];
-
   function updateStyles() {
-    let style = STYLES.filter(style => style.name == this.name)[0];
-    let val = this.value;
-    let unit = this.dataset.sizing;
-
-    IMG.style[style.property] = style.value(val, unit);
+    let unit = this.dataset.sizing || '';
+    console.log(`--${this.name}`, this.value + unit);
+    document.documentElement.style.setProperty(`--${this.name}`, this.value + unit);
   }
 
-  STYLES.forEach(style => {
-    document.querySelector(`input[name="${style.name}"]`).addEventListener('change', updateStyles);
+  let inputs = document.querySelectorAll(`input`)
+
+  inputs.forEach(input => {
+    input.addEventListener('input', updateStyles);
   });
 
   </script>
