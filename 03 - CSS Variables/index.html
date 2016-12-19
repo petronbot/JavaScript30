@@ -7,7 +7,7 @@
 <body>
   <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
 
-  <div class="controls">
+  <div class="inputs">
     <label for="spacing">Spacing:</label>
     <input type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
 
@@ -38,16 +38,52 @@
       font-size: 50px;
     }
 
-    .controls {
+    .inputs {
       margin-bottom: 50px;
     }
 
     input {
       width:100px;
     }
+
+    img {
+      border: 0 solid #ffc600;
+    }
   </style>
 
   <script>
+
+  const IMG = document.querySelector('img');
+  const STYLES = [
+    {
+      property: 'borderWidth',
+      value: (val, unit) => `${val}${unit}`,
+      name: 'spacing'
+    },
+    {
+      property: 'filter',
+      value: (val, unit) => `blur(${val}${unit})`,
+      name: 'blur'
+    },
+    {
+      property: 'borderColor',
+      value: (val) => val,
+      name: 'base'
+    }
+  ];
+
+  function updateStyles() {
+    let style = STYLES.filter(style => style.name == this.name)[0];
+    let val = this.value;
+    let unit = this.dataset.sizing;
+
+    IMG.style[style.property] = style.value(val, unit);
+  }
+
+  STYLES.forEach(style => {
+    document.querySelector(`input[name="${style.name}"]`).addEventListener('change', updateStyles);
+  });
+
   </script>
 
 </body>
