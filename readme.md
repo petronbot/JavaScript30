@@ -19,7 +19,7 @@ While I've aimed to keep my code tidy and readable, I'm not spending a lot of ti
 
 * [x] 01 - JavaScript Drum Kit
 * [x] 02 - JS + CSS Clock
-* [ ] 03 - CSS Variables
+* [x] 03 - CSS Variables
 * [ ] 04 - Array Cardio Day 1
 * [ ] 05 - Flex Panel Gallery
 * [ ] 06 - Type Ahead
